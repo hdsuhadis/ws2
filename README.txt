@@ -1,4 +1,4 @@
-INCLUDED FILES:
+## INCLUDED FILES:
 * source - folder with source code of the Java project
 
 * program.exe - main program executable for Windows computers
@@ -12,14 +12,13 @@ INCLUDED FILES:
 	* sequence_diagram_in.png - Sequence diagram which covers one input requirement
 	* sequence_diagram_out.png - Sequence diagram which covers one output requirement
 
-
-HOW TO INSTALL JAVA AND RUN THE PROGRAM:
+## HOW TO INSTALL JAVA AND RUN THE PROGRAM:
 1. If Java is not installed on the computer, or if the installed version is outdated, please visit https://www.java.com/en/download/. The "Java Download" button should redirect you to a download for your operating system.
 2. If Java could not be installed, visit https://www.java.com/en/download/help/linux_x64_install.xml or https://java.com/en/download/help/mac_install.xml to see more detailed installation steps.
 3. Double-click the program.exe file or the program.jar file, which should open the application in a new window
 4. If the program can still not be opened, please compile the code yourself. 
 
-HOW TO COMPILE THE PROJECT MANUALLY (with Eclipse IDE):
+## HOW TO COMPILE THE PROJECT MANUALLY (with Eclipse IDE):
 1. Visit https://gluonhq.com/products/javafx/ and download the version of JavaFX 11.0.2 that is compatible with your operating system, and unpack it 
 2. Visit https://www.eclipse.org/downloads/ and download the Eclipse IDE 
 3. Install Eclipse IDE for Java Developers. Visit https://www.eclipse.org/downloads/packages/installer for more detailed installation instructions
