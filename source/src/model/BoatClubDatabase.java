@@ -22,10 +22,14 @@ public class BoatClubDatabase {
 
 	// Initial import of data from json file at program start
 	public ArrayList<BoatClubMember> importMembers() throws IOException{
+		// ArrayList to store the members in a more easily handled way
 		ArrayList<BoatClubMember> members = new ArrayList<BoatClubMember>();
+		
 		try {
+			// Import all members from the file
 			JSONArray arrayJSON = (JSONArray) parser.parse(new FileReader(new File(this.savefileAddress).getAbsolutePath()));
 
+			// Loop run for each imported member in the json array
 			for (Object o : arrayJSON) {
 				JSONObject memberJSON = (JSONObject) o;
 				
@@ -40,13 +44,16 @@ public class BoatClubDatabase {
 				JSONArray boatsJSON = (JSONArray) memberJSON.get("boats");
 				// Only try to import boats if the member actually has any
 				if (boatsJSON != null) {
+					// Loop run for each boat related to the imported member
 					for (Object b : boatsJSON) {
 						JSONObject boatJSON = (JSONObject) b;
 	
+						// Set the values from the imported data
 						int length = Long.valueOf(boatJSON.get("length").toString()).intValue();
 						int width = Long.valueOf(boatJSON.get("width").toString()).intValue();
 						String type = (String) boatJSON.get("type");
 						
+						// Create a new boat from the data and add it to the member's list of boats
 						Boat boat = new Boat(length,width,type);					
 						member.addBoat(boat);
 					}
@@ -66,10 +73,12 @@ public class BoatClubDatabase {
 	@SuppressWarnings("unchecked")
 	public void update(ArrayList<BoatClubMember> memberList) {
 		JSONArray membersJSON = new JSONArray();
+		
+		// Loop run for each BoatClubMember in the current member list
 		for (BoatClubMember member : memberList) {
 			JSONObject memberJSON = new JSONObject();
 
-			// Basic member info
+			// Save member info
 			memberJSON.put("name", member.getName());
 			memberJSON.put("memberID", member.getMemberID());
 			memberJSON.put("personalNumber",  member.getPersonalNumber());
@@ -77,8 +86,10 @@ public class BoatClubDatabase {
 			ArrayList<Boat> boatList= member.getBoatList();
 			JSONArray boatsJSON = new JSONArray();
 			if (boatList.size() > 0) {
+				// Loop run for each boat in the list of boats of the current member
 				for (Boat boat : boatList) {
 					JSONObject boatJSON = new JSONObject();
+					// Save boat info
 					boatJSON.put("length", boat.getLength());
 					boatJSON.put("width", boat.getWidth());
 					boatJSON.put("type", boat.getType().toString());
@@ -86,8 +97,10 @@ public class BoatClubDatabase {
 					boatsJSON.add(boatJSON);
 				}
 			}
+			// Add the list of boats to the member
 			memberJSON.put("boats", boatsJSON);
 
+			// Add the member with it's boats to the json array
 			membersJSON.add(memberJSON);
 		}
 		

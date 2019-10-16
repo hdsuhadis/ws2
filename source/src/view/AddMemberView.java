@@ -26,27 +26,31 @@ public class AddMemberView extends FlowPane{
 	private MemberRegistry registry;
 	private InputValidator validator;
 
+	// Constructor
 	public AddMemberView() {
 		this.setPadding(new Insets(20,10,10,10));
 		this.setAlignment(Pos.TOP_CENTER);
+		
 		this.registry = new MemberRegistry();
 		this.validator = new InputValidator();
 
 		this.getChildren().add(getForm());	
-
 	}
 
 	//Add new member form
 	private GridPane getForm() {
 		GridPane form = new GridPane();
-
+		
+		// Basic form styling
 		form.setPadding(new Insets(10,20,20,20));
 		form.setHgap(30);
 		form.setVgap(10);
 		form.setBorder(new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0))));
 
+		// Index is used to anchor the elements in the correct position on the Y-axis
 		int index = 0;
-		//Header
+		
+		// Form header, simply a row of text
 		Label header = new Label("New Member");
 		GridPane.setConstraints(header, 0, index);
 		GridPane.setHalignment(header, HPos.CENTER);
@@ -54,7 +58,7 @@ public class AddMemberView extends FlowPane{
 		index++;
 
 
-		//MemberInfoGroup of Form >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// GridPane containing the input fields for member information
 		GridPane memberInfoGroup = new GridPane();
 		memberInfoGroup.setHgap(10);
 		memberInfoGroup.setVgap(10);
@@ -62,32 +66,31 @@ public class AddMemberView extends FlowPane{
 		memberInfoGroup.setBorder(new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(1.0))));
 		GridPane.setConstraints(memberInfoGroup, 0, index);
 		form.getChildren().add(memberInfoGroup);
-		index++;
 
-		//Name
-		TextField nameField = new TextField();
-		nameField.setPromptText("Firstname Lastname");
-		nameField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
-		GridPane.setConstraints(nameField, 0, 0);
-
-		Label nameLabel = new Label("Name");
-		//GridPane.setMargin(nameLabel, new Insets(0, 0, 0, 10));
-		GridPane.setConstraints(nameLabel, 1, 0);
-
-		//Personal Number
-		TextField personalNumberField = new TextField();
-		personalNumberField.setPromptText("YYMMDDXXXX");
-		personalNumberField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
-		GridPane.setConstraints(personalNumberField, 0, 1);
-
-		Label personalNumberLabel = new Label("Personal Number");
-		//GridPane.setMargin(personalNumberLabel, new Insets(0, 0, 0, 10));
-		GridPane.setConstraints(personalNumberLabel, 1, 1);
+			// Input field for name
+			TextField nameField = new TextField();
+			nameField.setPromptText("Firstname Lastname"); // Placeholder text that explains what input is expected
+			nameField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
+			GridPane.setConstraints(nameField, 0, 0);
+	
+			// Label for the name input field
+			Label nameLabel = new Label("Name");
+			GridPane.setConstraints(nameLabel, 1, 0);
+	
+			// Input field for personal Number
+			TextField personalNumberField = new TextField();
+			personalNumberField.setPromptText("YYMMDDXXXX"); // Placeholder text that explains what input is expected
+			personalNumberField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
+			GridPane.setConstraints(personalNumberField, 0, 1);
+			
+			// Label for the personal Number input field
+			Label personalNumberLabel = new Label("Personal Number");
+			GridPane.setConstraints(personalNumberLabel, 1, 1);
 
 		memberInfoGroup.getChildren().addAll(nameField, nameLabel, personalNumberField, personalNumberLabel);
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+		index++;
 
-		//BoatListGroup of Form >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+		// GridPane containing the input fields for the added boats, starts empty
 		GridPane boatListGroup = new GridPane();
 		boatListGroup.setHgap(10);
 		boatListGroup.setVgap(10);
@@ -96,29 +99,26 @@ public class AddMemberView extends FlowPane{
 		form.getChildren().add(boatListGroup);
 		index++;	
 
-		//<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-
-		//addBoatButton
+		// Button to add boats to the boat list
 		Button addBoatToFormButton = getAddBoatToGroupButton(boatListGroup);
 		GridPane.setConstraints(addBoatToFormButton, 0, index);
 		index++;
 
-		//AddMemberButton
-		Button addMemberButton = getAddMemberButton(nameField, personalNumberField, boatListGroup);
-		GridPane.setConstraints(addMemberButton, 0, index);
-		GridPane.setHalignment(addMemberButton, HPos.CENTER);
+		// Button to save the member and it's boats to the database
+		Button saveMemberButton = getSaveMemberButton(nameField, personalNumberField, boatListGroup);
+		GridPane.setConstraints(saveMemberButton, 0, index);
+		GridPane.setHalignment(saveMemberButton, HPos.CENTER);
 
-		form.getChildren().addAll(addBoatToFormButton, addMemberButton);
+		form.getChildren().addAll(addBoatToFormButton, saveMemberButton);
 
 		return form;
 	}
 
-	//Button that adds a new form for entering boat info to boatListGroup
+	// Button that adds a new form for entering boat info to boatListGroup
 	private Button getAddBoatToGroupButton(GridPane boatGroup) {
 		Button addBoatToFormButton = new Button("+ Add Boat");
 
 		addBoatToFormButton.setOnAction(e -> {
-
 			BoatInfoPane boatInfoPane = new BoatInfoPane(boatGroup);
 			GridPane.setConstraints(boatInfoPane, 0, boatGroup.getChildren().size());
 			boatGroup.getChildren().add(boatInfoPane);
@@ -128,19 +128,21 @@ public class AddMemberView extends FlowPane{
 		return addBoatToFormButton;
 	}
 
-	private Button getAddMemberButton(TextField nameField, TextField personalNumberField, GridPane boatGroup) {
-		Button addMemberButton = new Button("Save new member");
+	// Button that saves all the input data 
+	private Button getSaveMemberButton(TextField nameField, TextField personalNumberField, GridPane boatGroup) {
+		Button saveMemberButton = new Button("Save new member");
 
-		addMemberButton.setOnAction(e -> {
-			if(checkIfValidInput(nameField, personalNumberField, boatGroup)){
+		saveMemberButton.setOnAction(e -> {
+			// Only save the data if the input is OK
+			if(validInput(nameField, personalNumberField, boatGroup)){
 				BoatClubMember newMember = registry.addMember(nameField.getText(), Long.parseLong(personalNumberField.getText()));
 				ArrayList<Boat> newBoatList = new ArrayList<Boat>();
 
 				for(int i = 0; i < boatGroup.getChildren().size(); i++) {
 					newBoatList.add(new Boat(
-							Integer.parseInt(((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatLength().getText()),
-							Integer.parseInt(((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatWidth().getText()),
-							((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatType().getValue()
+							Integer.parseInt(((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatLengthField().getText()),
+							Integer.parseInt(((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatWidthField().getText()),
+							((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatType()
 							));
 				}
 				registry.updateBoatsForMember(newMember.getMemberID(), newBoatList); 
@@ -149,44 +151,49 @@ public class AddMemberView extends FlowPane{
 			}
 		});
 
-		return addMemberButton;
+		return saveMemberButton;
 	}
 
-
-	private boolean checkIfValidInput(TextField nameField, TextField personalNumberField, GridPane boatGroup) {
+	
+	// Large input validation method, checks all fields at once and returns a boolean to stop incorrect data being saved
+	// The method also changes the border colour of all fields to indicate which of them have incorrect data
+	private boolean validInput(TextField nameField, TextField personalNumberField, GridPane boatGroup) {
 
         boolean inputValid = true;
         
-        // Basic member data control
+        // Check name input
         if(!validator.validName(nameField.getText())) {
+        	// Change the border of the field to red, to indicate invalid input
             nameField.setBorder((new Border(new BorderStroke(Paint.valueOf("Red"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
             inputValid = false;
         } else 
         	nameField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
         
-        
-        // Boat control
+        // Check personal number input
         if(!validator.validPersonalNumber(personalNumberField.getText())) {
+        	// Change the border of the field to red, to indicate invalid input
             personalNumberField.setBorder((new Border(new BorderStroke(Paint.valueOf("Red"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
             inputValid = false;
         } else 
         	personalNumberField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
         
-        
+        // Boat check loop
         for(int i = 0; i < boatGroup.getChildren().size(); i++) {
-            TextField currentLengthField = ((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatLength();
-            TextField currentWidthField = ((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatWidth();
+        	// Get the fields related to the boat currently being checked
+            TextField currentLengthField = ((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatLengthField();
+            TextField currentWidthField = ((BoatInfoPane)boatGroup.getChildren().get(i)).getBoatWidthField();
             
             // Check length input
             if(!validator.inputIsNumeric(currentLengthField.getText())) {
+            	// Change the border of the field to red, to indicate invalid input
                 currentLengthField.setBorder((new Border(new BorderStroke(Paint.valueOf("Red"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
                 inputValid = false;
             } else 
             	 currentLengthField.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
             
-            
             // Check width input
             if(!validator.inputIsNumeric(currentWidthField.getText())) {
+            	// Change the border of the field to red, to indicate invalid input
                 currentWidthField.setBorder((new Border(new BorderStroke(Paint.valueOf("Red"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
                 inputValid = false;
             } else 
@@ -196,6 +203,8 @@ public class AddMemberView extends FlowPane{
         
         return inputValid;
     }
+	
+	// Private inner class that contains input fields for one boat
 	private class BoatInfoPane extends GridPane{
 		private Label boatCounterLabel;
 		private ChoiceBox<Boat.Type> boatTypeChoiceBox;
@@ -205,7 +214,14 @@ public class AddMemberView extends FlowPane{
 		private TextField widthBox;
 		private Label boatWidthLabel;
 
+		// Constructor
 		public BoatInfoPane(GridPane boatGroup) {
+			// Basic styling
+			this.setVgap(5);
+			this.setHgap(10);
+			this.setPadding(new Insets(10));
+			
+			// Header to separate from other added boats
 			boatCounterLabel = new Label("Boat " + (boatGroup.getChildren().size() + 1));
 
 			// Boat type selection box
@@ -226,6 +242,7 @@ public class AddMemberView extends FlowPane{
 			widthBox.setBorder((new Border(new BorderStroke(Paint.valueOf("LightGrey"), BorderStrokeStyle.SOLID, new CornerRadii(3), new BorderWidths(0.75)))));
 			boatWidthLabel = new Label("Width");
 			
+			// Anchoring all the elements
 			GridPane.setConstraints(boatCounterLabel, 0, 0);
 			GridPane.setConstraints(boatTypeChoiceBox, 0, 1);
 			GridPane.setConstraints(boatTypeLabel, 1, 1);
@@ -234,21 +251,21 @@ public class AddMemberView extends FlowPane{
 			GridPane.setConstraints(widthBox, 0, 3);
 			GridPane.setConstraints(boatWidthLabel, 1, 3);
 
-			this.setVgap(5);
-			this.setHgap(10);
-			this.setPadding(new Insets(10));
 			this.getChildren().addAll(boatCounterLabel, boatTypeChoiceBox, boatTypeLabel, lengthBox, boatLengthLabel, widthBox, boatWidthLabel);
 		}
-
-		public ChoiceBox<Boat.Type> getBoatType() {
-			return boatTypeChoiceBox;
+		
+		// Returns the selected boat type
+		public Boat.Type getBoatType() {
+			return boatTypeChoiceBox.getValue();
 		}
-
-		public TextField getBoatLength() {
+		
+		// Returns the input field for boat length, can be used to edit it's styling when incorrect input is given
+		public TextField getBoatLengthField() {
 			return lengthBox;
 		}
-
-		public TextField getBoatWidth() {
+		
+		// Returns the input field for boat width, can be used to edit it's styling when incorrect input is given
+		public TextField getBoatWidthField() {
 			return widthBox;
 		}
 

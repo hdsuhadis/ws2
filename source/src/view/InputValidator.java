@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class InputValidator {
 
+	// Check if given input is a numeric value
 	public boolean inputIsNumeric(String input) {
 	    try {
 	        Long.parseLong(input);
@@ -13,6 +14,7 @@ public class InputValidator {
 	    return true;
 	}
 	
+	// Check if given input is a numeric value and of correct length for a personal number
 	public boolean validPersonalNumber(String input) {
 	    try {
 	        Long.parseLong(input);
@@ -24,10 +26,12 @@ public class InputValidator {
 	    return true;
 	}
 	
+	// Check if given input is a valid name (Firstname Lastname)
 	public boolean validName(String input) {
         boolean nameValid = true;
         ArrayList<String> strings = new ArrayList<String>();
         
+        // Characters considered to be valid input
         char[] validCharacter = {
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'å', 'ä', 'ö',
                 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'Å', 'Ä', 'Ö'                   
